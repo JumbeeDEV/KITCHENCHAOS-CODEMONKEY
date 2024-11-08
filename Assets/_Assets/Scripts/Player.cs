@@ -9,6 +9,17 @@ public class Player : MonoBehaviour
     [SerializeField]private GameInput gameInput;
     private void Update()
     {
+        HandleMovement();
+        HandleInteractions();
+    }
+
+    private void HandleInteractions()
+    {
+        Vector2 inputVector = gameInput.GetMovementVectorNormalized();
+        Vector3 moveDirection = new Vector3(inputVector.x, 0f, inputVector.y);
+    }
+    private void HandleMovement()
+    {
         Vector2 inputVector = gameInput.GetMovementVectorNormalized();
         Vector3 moveDirection = new Vector3(inputVector.x, 0f, inputVector.y);
         
@@ -21,8 +32,7 @@ public class Player : MonoBehaviour
         {
             Vector3 moveDirectionX = new Vector3(moveDirection.x, 0, 0);
             canMove = !Physics.CapsuleCast(transform.position, transform.position + Vector3.up * playerHeight, playerRadius, moveDirectionX, moveDistance);
-                
-
+            
             if (canMove)
             {
                 moveDirection = moveDirectionX;
@@ -31,21 +41,17 @@ public class Player : MonoBehaviour
             {
                 Vector3 moveDirectionZ = new Vector3(0, 0, moveDirection.z);
                 canMove = !Physics.CapsuleCast(transform.position, transform.position + Vector3.up * playerHeight, playerRadius, moveDirectionZ, moveDistance);
-                   
-
+                
                 if (canMove)
                 {
                     moveDirection = moveDirectionZ;
-
                 }
                 else
                 {
                     //cannot move in any direction
                 }
-
             }
         }
-
         if (canMove)
         {
             transform.position += moveDirection * moveDistance;
@@ -54,13 +60,11 @@ public class Player : MonoBehaviour
         transform.forward = Vector3.Slerp(transform.forward, moveDirection, rotateSpeed * Time.deltaTime);
         
         isWalking = moveDirection != Vector3.zero;
-        
     }
     
-    
-
     public bool IsWalking()
     {
         return isWalking;
     }
+
 }    
