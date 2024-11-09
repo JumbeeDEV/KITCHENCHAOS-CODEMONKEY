@@ -4,9 +4,11 @@ public class Player : MonoBehaviour
 {
     [SerializeField]private float moveSpeed = 5f;
     [SerializeField]private float rotateSpeed = 10f;
-
-    public bool isWalking;
     [SerializeField]private GameInput gameInput;
+    [SerializeField] private LayerMask clearCounterLayerMask; 
+    public bool isWalking;
+    private Vector3 lastInteractDirection;
+   
     private void Update()
     {
         HandleMovement();
@@ -17,6 +19,22 @@ public class Player : MonoBehaviour
     {
         Vector2 inputVector = gameInput.GetMovementVectorNormalized();
         Vector3 moveDirection = new Vector3(inputVector.x, 0f, inputVector.y);
+
+        if (moveDirection != Vector3.zero)
+        {
+            lastInteractDirection = moveDirection;
+        }
+        
+        float interactDistance = 2f;
+        if (Physics.Raycast(transform.position, lastInteractDirection, out RaycastHit raycastHit, interactDistance, clearCounterLayerMask))
+        {
+            ClearCounter clearCounter = raycastHit.transform.GetComponent<ClearCounter>();
+            if (clearCounter != null)
+            {
+                //has clear counter
+                clearCounter.Interact();
+            }
+        }
     }
     private void HandleMovement()
     {
