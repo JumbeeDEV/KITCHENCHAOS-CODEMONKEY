@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class Player : MonoBehaviour
@@ -8,34 +9,27 @@ public class Player : MonoBehaviour
     [SerializeField] private LayerMask clearCounterLayerMask; 
     public bool isWalking;
     private Vector3 lastInteractDirection;
-   
+
+    private void Start()
+    {
+        gameInput.OnInteractAction += GameInputOnInteractAction;
+    }
+    private void GameInputOnInteractAction(object sender, EventArgs e)
+    {
+        float interactDistance = 2f;
+        if (Physics.Raycast(transform.position, lastInteractDirection, out RaycastHit raycastHit, interactDistance, clearCounterLayerMask))
+        {
+            ClearCounter clearCounter = raycastHit.transform.GetComponent<ClearCounter>();
+            clearCounter?.Interact();
+        }
+    }
+
     private void Update()
     {
         HandleMovement();
         HandleInteractions();
     }
-
-    private void HandleInteractions()
-    {
-        Vector2 inputVector = gameInput.GetMovementVectorNormalized();
-        Vector3 moveDirection = new Vector3(inputVector.x, 0f, inputVector.y);
-
-        if (moveDirection != Vector3.zero)
-        {
-            lastInteractDirection = moveDirection;
-        }
-        
-        float interactDistance = 2f;
-        if (Physics.Raycast(transform.position, lastInteractDirection, out RaycastHit raycastHit, interactDistance, clearCounterLayerMask))
-        {
-            ClearCounter clearCounter = raycastHit.transform.GetComponent<ClearCounter>();
-            if (clearCounter != null)
-            {
-                //has clear counter
-                clearCounter.Interact();
-            }
-        }
-    }
+    
     private void HandleMovement()
     {
         Vector2 inputVector = gameInput.GetMovementVectorNormalized();
@@ -78,6 +72,17 @@ public class Player : MonoBehaviour
         transform.forward = Vector3.Slerp(transform.forward, moveDirection, rotateSpeed * Time.deltaTime);
         
         isWalking = moveDirection != Vector3.zero;
+    }
+
+    private void HandleInteractions()
+    {
+        Vector2 inputVector = gameInput.GetMovementVectorNormalized();
+        Vector3 moveDirection = new Vector3(inputVector.x, 0f, inputVector.y);
+
+        if (moveDirection != Vector3.zero)
+        {
+            lastInteractDirection = moveDirection;
+        }
     }
     
     public bool IsWalking()
