@@ -8,9 +8,22 @@ public class Player : MonoBehaviour
     [SerializeField]private GameInput gameInput;
     [SerializeField] private LayerMask clearCounterLayerMask; 
     
+    public static Player Instance { get; private set; }
+    public event EventHandler <OnSelectedCounterChangedEventArgs> OnSelectedCounterChanged;
+    public class OnSelectedCounterChangedEventArgs : EventArgs {public ClearCounter eventSelectedCounter;}
+    
     public bool isWalking;
     private Vector3 lastInteractDirection;
     private ClearCounter selectedCounter;
+
+    private void Awake()
+    {
+        if (Instance != null)
+        {
+            Debug.LogError("More than one instance of Player");
+        }
+        Instance = this;
+    }
 
     private void Start()
     {
@@ -18,7 +31,10 @@ public class Player : MonoBehaviour
     }
     private void GameInputOnInteractAction(object sender, EventArgs e)
     {
- 
+        if (selectedCounter != null)
+        {
+            selectedCounter.Interact();
+        }
     }
 
     private void Update()
@@ -88,16 +104,22 @@ public class Player : MonoBehaviour
             {
                 if (clearCounter != selectedCounter)
                 {
-                    selectedCounter = clearCounter;
-                    Debug.Log(raycastHit.transform.name);
-                }else {selectedCounter = null;}
+                    SetSelectedCounter(clearCounter);
+
+                }else { SetSelectedCounter(null); }
             }
-        }else {selectedCounter = null;}
+        }else { SetSelectedCounter(null); }
     }
     
     public bool IsWalking()
     {
         return isWalking;
+    }
+
+    private void SetSelectedCounter(ClearCounter selectedCounter)
+    {
+        this.selectedCounter = selectedCounter;
+        OnSelectedCounterChanged?.Invoke(this, new OnSelectedCounterChangedEventArgs { eventSelectedCounter = selectedCounter });
     }
 
 }    

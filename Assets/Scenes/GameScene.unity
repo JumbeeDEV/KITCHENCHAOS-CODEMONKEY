@@ -970,6 +970,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7807882105158837079, guid: ded75a4a453c35149a20b2d1617d5528, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 9022255130851196865, guid: ded75a4a453c35149a20b2d1617d5528, type: 3}
       propertyPath: m_Name
       value: ClearCounter

@@ -8,7 +8,7 @@ public class PlayerAnimator : MonoBehaviour
     
     [SerializeField] private Player player;
 
-    private void Awake()
+    private void Awake() 
     {
         animator = GetComponent<Animator>();
     }
