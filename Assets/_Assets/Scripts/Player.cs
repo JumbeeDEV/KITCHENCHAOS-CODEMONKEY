@@ -115,7 +115,6 @@ public class Player : MonoBehaviour
     {
         return isWalking;
     }
-
     private void SetSelectedCounter(ClearCounter selectedCounter)
     {
         this.selectedCounter = selectedCounter;

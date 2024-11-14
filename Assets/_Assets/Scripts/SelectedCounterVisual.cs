@@ -10,7 +10,6 @@ public class SelectedCounterVisual : MonoBehaviour
      {
           Player.Instance.OnSelectedCounterChanged += Player_OnSelectedCounterChanged;
      }
-
      private void Player_OnSelectedCounterChanged(object sender, Player.OnSelectedCounterChangedEventArgs e)
      {
           if (e.eventSelectedCounter == clearCounter)
@@ -21,14 +20,11 @@ public class SelectedCounterVisual : MonoBehaviour
           {
                HideSelectedCounterVisual();
           }
-
      }
-
      private void ShowSelectedCounterVisual()
      {
           selectedCounterVisual.SetActive(true);
      }
-
      private void HideSelectedCounterVisual()
      {
           selectedCounterVisual.SetActive(false);

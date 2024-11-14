@@ -14,12 +14,10 @@ public class GameInput : MonoBehaviour
 
         playerInputActions.Player.Interact.performed += InteractOnperformed;
     }
-    
     private void InteractOnperformed(InputAction.CallbackContext obj)
     {
         OnInteractAction.Invoke(this, EventArgs.Empty);
     }
-
     public Vector2 GetMovementVectorNormalized()
     {
         Vector2 inputVector = playerInputActions.Player.Move.ReadValue<Vector2>();
